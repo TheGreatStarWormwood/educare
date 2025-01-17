@@ -11,7 +11,6 @@ public class UserMapper {
             user.getName(),
             user.getEmail(),
             user.getPasswordHash(),
-            user.getProfileDetails(),
             user.getUserType()
         );
     }
@@ -21,7 +20,6 @@ public class UserMapper {
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
         user.setPasswordHash(userDto.getPasswordHash());
-        user.setProfileDetails(userDto.getProfileDetails());
         user.setUserType(userDto.getUserType());
         return user;
     }

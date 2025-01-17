@@ -8,27 +8,25 @@ public class UserDto {
     private String name;
     private String email;
     private String passwordHash;
-    private String profileDetails;
     private String userType;
 
     // Constructor, Getters, and Setters
-    public UserDto(Long id, String name, String email, String passwordHash, String profileDetails, String userType) {
+    public UserDto(Long id, String name, String email, String passwordHash, String userType) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.passwordHash = passwordHash;
-        this.profileDetails = profileDetails;
         this.userType = userType;
     }
 
     public UserDto() {}
 
     public static UserDto fromEntity(User user) {
-        return new UserDto(user.getId(), user.getName(), user.getEmail(), user.getPasswordHash(), user.getProfileDetails(), user.getUserType());
+        return new UserDto(user.getId(), user.getName(), user.getEmail(), user.getPasswordHash(),  user.getUserType());
     }
 
     public static User toEntity(UserDto dto) {
-        return new User(dto.getName(), dto.getEmail(), dto.getPasswordHash(), dto.getProfileDetails(), dto.getUserType());
+        return new User(dto.getName(), dto.getEmail(), dto.getPasswordHash(),  dto.getUserType());
     }
 
     public Long getId() {
@@ -63,13 +61,6 @@ public class UserDto {
         this.passwordHash = passwordHash;
     }
 
-    public String getProfileDetails() {
-        return profileDetails;
-    }
-
-    public void setProfileDetails(String profileDetails) {
-        this.profileDetails = profileDetails;
-    }
 
     public String getUserType() {
         return userType;

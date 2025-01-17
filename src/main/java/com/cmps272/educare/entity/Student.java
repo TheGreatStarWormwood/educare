@@ -41,6 +41,10 @@ public class Student {
         this.profileDetails = profileDetails;
     }
 
+    public Student(Long studentId) {
+        //TODO Auto-generated constructor stub
+    }
+
     public Long getId() {
         return id;
     }

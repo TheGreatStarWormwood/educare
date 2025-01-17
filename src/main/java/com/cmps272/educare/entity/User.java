@@ -27,8 +27,6 @@ public class User {
     @Column(name = "password_hash")
     private String passwordHash;
 
-    @Column(name = "profile_details")
-    private String profileDetails;
 
     @Column(name = "user_type", nullable = false)
     private String userType;  // e.g., "Student" or "EducationalProvider"
@@ -36,11 +34,10 @@ public class User {
     // Constructors, getters, and setters
     public User() {}
 
-    public User(String name, String email, String passwordHash, String profileDetails, String userType) {
+    public User(String name, String email, String passwordHash, String userType) {
         this.name = name;
         this.email = email;
         this.passwordHash = passwordHash;
-        this.profileDetails = profileDetails;
         this.userType = userType;
     }
 
@@ -74,14 +71,6 @@ public class User {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
-    }
-
-    public String getProfileDetails() {
-        return profileDetails;
-    }
-
-    public void setProfileDetails(String profileDetails) {
-        this.profileDetails = profileDetails;
     }
 
     public String getUserType() {

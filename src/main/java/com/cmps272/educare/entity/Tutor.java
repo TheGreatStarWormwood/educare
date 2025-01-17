@@ -40,6 +40,10 @@ public class Tutor {
         this.profileDetails = profileDetails;
     }
 
+    public Tutor(Long tutorId) {
+        //TODO Auto-generated constructor stub
+    }
+
     public Long getId() {
         return id;
     }
