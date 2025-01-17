@@ -11,8 +11,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)  // Use SINGLE_TABLE for a single table for both types
-@Table(name = "users")
-public class User {
+@Table(name = "Students")
+public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,18 +30,15 @@ public class User {
     @Column(name = "profile_details")
     private String profileDetails;
 
-    @Column(name = "user_type", nullable = false)
-    private String userType;  // e.g., "Student" or "EducationalProvider"
 
     // Constructors, getters, and setters
-    public User() {}
+    public Student() {}
 
-    public User(String name, String email, String passwordHash, String profileDetails, String userType) {
+    public Student(String name, String email, String passwordHash, String profileDetails) {
         this.name = name;
         this.email = email;
         this.passwordHash = passwordHash;
         this.profileDetails = profileDetails;
-        this.userType = userType;
     }
 
     public Long getId() {
@@ -84,11 +81,4 @@ public class User {
         this.profileDetails = profileDetails;
     }
 
-    public String getUserType() {
-        return userType;
-    }
-
-    public void setUserType(String userType) {
-        this.userType = userType;
-    }
 }

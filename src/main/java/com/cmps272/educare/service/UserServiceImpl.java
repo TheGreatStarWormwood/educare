@@ -11,7 +11,6 @@ import com.cmps272.educare.entity.User;
 import com.cmps272.educare.exception.UserNotFoundException;
 import com.cmps272.educare.mapper.UserMapper;
 import com.cmps272.educare.repository.UserRepository;
-import com.cmps272.educare.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
