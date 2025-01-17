@@ -1,32 +1,43 @@
-package com.cmps272.educare.dto;
+package com.cmps272.educare.entity;
 
-import com.cmps272.educare.entity.Student;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Table;
 
-public class StudentDto {
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)  // Use SINGLE_TABLE for a single table for both types
+@Table(name = "Tutors")
+public class Tutor {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "password_hash")
     private String passwordHash;
+
+    @Column(name = "profile_details")
     private String profileDetails;
 
-    // Constructor, Getters, and Setters
-    public StudentDto(Long id, String name, String email, String passwordHash, String profileDetails) {
-        this.id = id;
+    // Constructors, getters, and setters
+    public Tutor() {}
+
+    public Tutor(String name, String email, String passwordHash, String profileDetails) {
         this.name = name;
         this.email = email;
         this.passwordHash = passwordHash;
         this.profileDetails = profileDetails;
-    }
-
-    public StudentDto() {}
-
-    public static StudentDto fromEntity(Student Student) {
-        return new StudentDto(Student.getId(), Student.getName(), Student.getEmail(), Student.getPasswordHash(), Student.getProfileDetails());
-    }
-
-    public static Student toEntity(StudentDto dto) {
-        return new Student(dto.getName(), dto.getEmail(), dto.getPasswordHash(), dto.getProfileDetails());
     }
 
     public Long getId() {
@@ -68,6 +79,4 @@ public class StudentDto {
     public void setProfileDetails(String profileDetails) {
         this.profileDetails = profileDetails;
     }
-
-
 }

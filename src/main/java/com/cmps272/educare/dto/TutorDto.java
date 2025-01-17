@@ -1,8 +1,8 @@
 package com.cmps272.educare.dto;
 
-import com.cmps272.educare.entity.Student;
+import com.cmps272.educare.entity.Tutor;
 
-public class StudentDto {
+public class TutorDto {
 
     private Long id;
     private String name;
@@ -11,7 +11,7 @@ public class StudentDto {
     private String profileDetails;
 
     // Constructor, Getters, and Setters
-    public StudentDto(Long id, String name, String email, String passwordHash, String profileDetails) {
+    public TutorDto(Long id, String name, String email, String passwordHash, String profileDetails) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -19,14 +19,14 @@ public class StudentDto {
         this.profileDetails = profileDetails;
     }
 
-    public StudentDto() {}
+    public TutorDto() {}
 
-    public static StudentDto fromEntity(Student Student) {
-        return new StudentDto(Student.getId(), Student.getName(), Student.getEmail(), Student.getPasswordHash(), Student.getProfileDetails());
+    public static TutorDto fromEntity(Tutor tutor) {
+        return new TutorDto(tutor.getId(), tutor.getName(), tutor.getEmail(), tutor.getPasswordHash(), tutor.getProfileDetails());
     }
 
-    public static Student toEntity(StudentDto dto) {
-        return new Student(dto.getName(), dto.getEmail(), dto.getPasswordHash(), dto.getProfileDetails());
+    public static Tutor toEntity(TutorDto dto) {
+        return new Tutor(dto.getName(), dto.getEmail(), dto.getPasswordHash(), dto.getProfileDetails());
     }
 
     public Long getId() {
@@ -68,6 +68,4 @@ public class StudentDto {
     public void setProfileDetails(String profileDetails) {
         this.profileDetails = profileDetails;
     }
-
-
 }
