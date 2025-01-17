@@ -19,9 +19,17 @@ public class UserController {
     private UserService userService;
 
     @PostMapping(value = "/user")
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<?> createUser(@RequestBody UserDto userDto) {
+        if (!isValidUserType(userDto.getUserType())) {
+            return new ResponseEntity<>("Invalid userType. Must be 'Student' or 'Tutor'.", HttpStatus.BAD_REQUEST);
+        }
+
         UserDto createdUser = userService.createUser(userDto);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    }
+
+    private boolean isValidUserType(String userType) {
+        return "student".equalsIgnoreCase(userType) || "tutor".equalsIgnoreCase(userType);
     }
 
     @GetMapping(value = "/user/{userId}")

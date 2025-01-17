@@ -12,7 +12,6 @@ import jakarta.persistence.Table;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)  // Use SINGLE_TABLE for a single table for both types
-@DiscriminatorColumn(name = "user_type")  // This will be used to differentiate between Student and EducationalProvider
 @Table(name = "users")
 public class User {
 
