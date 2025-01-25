@@ -1,0 +1,299 @@
+<!--  -->
+
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #F4DFBA;
+}
+
+header {
+    background-color: #876445;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+}
+
+header nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+header nav ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+header nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+main {
+    padding: 20px;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background-color: #876445;
+    border-radius: 100px;
+}
+
+.search-bar input[type="text"] {
+    padding: 0.5rem;
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 1rem;
+}
+
+.search-bar button {
+    padding: 0.5rem 1rem;
+    background-color: #F4DFBA;
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    max-width: 9rem;
+    height: 2rem;
+    max-width: 20rem;
+    border-radius: 20px;
+}
+
+.search-bar button:hover {
+    background-color: #876445;
+    color: white;
+}
+
+#tutor-list {
+    margin-top: 20px;
+    justify-content: center; 
+    margin: 20px auto;
+    padding: 10px;
+}
+
+#tutor-items {
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+    justify-content: center;
+}
+#tutor-items h3 {
+    text-align: center;
+}
+#tutor-items a {
+    text-decoration: none;
+    color: black;
+    
+}
+.tutor-item {
+    border: 2px solid #876445;
+    padding: 10px;
+    margin: 10px;
+    width: 200px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    
+}
+
+footer {
+    background-color: #876445;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    width: 100%;
+    bottom: 0;
+}
+
+/* Example basic CSS */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+main {
+    padding: 20px;
+}
+
+.star {
+    font-size: 20px;
+    color: #ccc;
+}
+
+.star.filled {
+    color: gold;
+}
+
+.directory{
+    max-width: 60%;
+    margin: auto;
+    background-color: #F4DFBA;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.tutor-image {
+    width: 5rem;
+    margin: auto;
+    margin-left: 3.8rem;
+}
+
+.tutor-profile {
+    max-width: 60%;
+    min-height: 50rem;
+    margin: auto;
+    background-color: #F4DFBA;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.tutor-info{
+    min-height: 10rem;
+    padding: 20px;
+    margin: auto;
+}
+#tutor-name {
+    text-align: left;
+    padding-bottom: 30px;
+}
+.tutor-listings{
+    margin: auto;
+    padding: 20px;
+}
+
+.horizontal-sep{
+    width: 95%; 
+    height: 2px; 
+    background-color: #876445; 
+    margin: 20px auto; 
+}
+
+.listings-grid {
+    display: grid;
+    margin-top: 20px;
+}
+
+/* Individual listing items */
+.listing-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    text-align: left;
+    width: 60%;
+    margin-bottom: 10px;
+}
+
+.listing-item a {
+    color: #876445;
+    text-decoration: none;
+}
+
+.listing-item a:hover {
+    text-decoration: underline;
+}
+
+.edit-profile {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.edit-profile button{
+    background-color: #876445;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    align-content: center;
+}
+
+.edit-profile button:hover{
+    background-color: #006666;
+}
+
+/* Style for the tutor profile container */
+.tutor-header {
+    display: flex;
+    flex-direction: column;  /* Stack the elements vertically */
+    margin-bottom: 20px;     /* Space between the tutor header and the listings */
+}
+
+.tutor-description { /* TODO color not changing */
+    color: #4CAF50; /* Example: Green */
+    font-size: 1.2em; /* Optional: Adjust font size */
+}
+
+.tutor-info {
+    display: flex;
+    align-items: center;   /* Vertically center the image and name */
+    margin-left: 10px;
+    margin-top: -50px;
+    margin-bottom: -50px;
+}
+
+.tutor-image-profile {
+    width: 60px;          /* Set a fixed width for the image */
+    height: 60px;         /* Set a fixed height for the image */
+    border-radius: 50%;    /* Optional: makes the image circular */
+    margin-right: 20px;    /* Space between the image and name */
+}
+
+.tutor-info h2 {
+    margin: 0;             /* Remove margin from the name */
+    font-size: 24px;       /* Adjust the font size */
+}
+
+.tutor-info p {
+    margin: 0;             /* Remove margin from the description */
+    font-size: 16px;       /* Adjust the font size */
+}
+
+/* Style for the tutor description */
+.tutor-header p {
+    font-size: 16px;        /* Font size for the description */
+    color: #555;            /* Light gray color for the description */
+}
+
+
+/* Style for the tutor listings */
+.tutor-listings {
+    font-size: 16px;
+}
+
+.tutor-listings ul {
+    list-style-type: none;   /* Remove the default list bullets */
+    padding: 0;              /* Remove padding */
+}
+
+.tutor-listings li {
+    margin-bottom: 15px;     /* Space between each listing */
+}
+
+#tutor-profile {
+    max-width: 800px;        
+    margin: 0 auto;          
+    padding: 20px;           
+    background-color: #F4DFBA; /* Light background for the profile */
+    border-radius: 8px;      
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    border: 2px solid #876445;
+}
