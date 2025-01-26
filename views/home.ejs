@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= pageTitle || "Home - Tutor Directory" %></title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F4DFBA;
+        }
+
+        header {
+            background-color: #876445;
+            color: #F4DFBA;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .column {
+            flex: 1;
+            text-align: center;
+            min-height: 50rem;
+            background-color: #f1f1f1;
+            border-radius: 50px;
+            padding: 0;
+            width: 40%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border: 4px solid #876445;
+        }
+
+        .column h2 {
+            margin: 1rem 0 0.5rem;
+        }
+
+        .column p {
+            margin: 0.5rem 0;
+        }
+
+        .column a {
+            display: inline-block;
+            margin-top: 0.5rem;
+            text-decoration: none;
+            color: white;
+            background-color: #008080;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .column a:hover {
+            background-color: #876445;
+        }
+
+        #dir-col {
+            background-image: url(imgs/dirBG.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            opacity: 55%;
+        }
+
+        #lms-col {
+            background-image: url(imgs/lmsBG.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            opacity: 55%;
+        }
+
+        footer {
+            text-align: center;
+            background-color: #876445;
+            color: #fff;
+            padding: 1rem 0;
+            margin-top: 2rem;
+        }
+
+        .column-internal {
+            background-color: #EEC373;
+            border-radius: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100%;
+            padding: 2rem;
+            box-sizing: border-box;
+            margin: auto;
+            margin-top: 10%;
+            width: 20rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border: 2px solid #876445;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Welcome to the Tutor Directory</h1>
+    </header>
+
+    <div class="container">
+        <div class="column" id="dir-col">
+            <div class="column-internal">
+                <h2>Find a Tutor</h2>
+                <p>Discover qualified tutors for a variety of subjects. Browse and select the one that suits your needs.</p>
+                <a href="/directory">Browse Tutors</a>
+            </div>
+        </div>
+    
+        <div class="column" id="lms-col">
+            <div class="column-internal">
+                <h2>Access your LMS</h2>
+                <p>View your LMS</p>
+                <a href="/lms">View now</a>
+            </div>
+        </div>
+    </div>
+    
+
+    <footer>
+        <p>&copy; <%= year || new Date().getFullYear() %> Tutor Directory. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>

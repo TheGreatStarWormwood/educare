@@ -70,8 +70,17 @@ async function getTutorsFromDatabase() {
     });
 }
 
-// Home route: Display items
 app.get('/', (req, res) => {
+    res.render('home', {
+        pageTitle: 'Welcome to Tutor Directory',
+        browseTutorsLink: '/tutors',
+        lmsLink: '/lms',
+        year: 2025,
+    });
+});
+
+// directory route: Display items
+app.get('/directory', (req, res) => {
     // Render the index.ejs file
     res.render('index');
 });
@@ -81,8 +90,219 @@ app.get('/tutor-profile', async (req, res) => {
     res.render('tutor-profile');
 });
 
+// Route to return the tutor profile data as JSON
+app.get('/lms', async (req, res) => {
+    res.render('lms');
+});
+
+
+
 
 // CRUD routes for Tutors
+
+app.get('/api/lms/:id/courses', async (req, res) => {
+    const lmsId = req.params.id;
+    console.log(`Fetching courses for LMS ID: ${lmsId}`);  // Add logging
+
+    try {
+        const query = `SELECT * FROM courses WHERE lms_id = ?`;
+        db.query(query, [lmsId], (err, results) => {
+            if (err) {
+                console.error('Error executing query: ', err);  // Log query errors
+                res.status(500).json({ error: 'Failed to fetch courses' });
+                return;
+            }
+
+            console.log('Query result:', results);  // Log the result
+            res.json(results);
+        });
+    } catch (err) {
+        console.error('Caught error: ', err);  // Log any other caught errors
+        res.status(500).json({ error: 'Failed to fetch courses' });
+    }
+});
+
+
+app.get('/api/students/:id/enrollments', async (req, res) => {
+    const studentId = req.params.id;
+    console.log(`Fetching enrollments for Student ID: ${studentId}`);  // Add logging
+
+    try {
+        const query = `SELECT * FROM enrollments WHERE student_id = ?`;
+        db.query(query, [studentId], (err, results) => {
+            if (err) {
+                console.error('Error executing query: ', err);  // Log query errors
+                res.status(500).json({ error: 'Failed to fetch enrollments' });
+                return;
+            }
+
+            console.log('Query result:', results);  // Log the result
+            res.json(results);
+        });
+    } catch (err) {
+        console.error('Caught error: ', err);  // Log any other caught errors
+        res.status(500).json({ error: 'Failed to fetch enrollments' });
+    }
+});
+
+app.get('/api/courses/:id/materials', async (req, res) => {
+    const courseId = req.params.id;
+    console.log(`Fetching materials for Course ID: ${courseId}`);  // Add logging
+
+    try {
+        const query = `SELECT * FROM materials WHERE course_id = ?`;
+        db.query(query, [courseId], (err, results) => {
+            if (err) {
+                console.error('Error executing query: ', err);  // Log query errors
+                res.status(500).json({ error: 'Failed to fetch materials' });
+                return;
+            }
+
+            console.log('Query result:', results);  // Log the result
+            res.json(results);
+        });
+    } catch (err) {
+        console.error('Caught error: ', err);  // Log any other caught errors
+        res.status(500).json({ error: 'Failed to fetch materials' });
+    }
+});
+
+app.get('/api/courses/:id/assignments', async (req, res) => {
+    const courseId = req.params.id;
+    console.log(`Fetching assignments for Course ID: ${courseId}`);  // Add logging
+
+    try {
+        const query = `SELECT * FROM assignments WHERE course_id = ?`;
+        db.query(query, [courseId], (err, results) => {
+            if (err) {
+                console.error('Error executing query: ', err);  // Log query errors
+                res.status(500).json({ error: 'Failed to fetch assignments' });
+                return;
+            }
+
+            console.log('Query result:', results);  // Log the result
+            res.json(results);
+        });
+    } catch (err) {
+        console.error('Caught error: ', err);  // Log any other caught errors
+        res.status(500).json({ error: 'Failed to fetch assignments' });
+    }
+});
+
+app.get('/api/lms/:id', async (req, res) => {
+    const lmsId = req.params.id;
+    console.log(`Fetching LMS information for LMS ID: ${lmsId}`);  // Add logging
+
+    try {
+        const query = `SELECT * FROM lms WHERE id = ?`;
+        db.query(query, [lmsId], (err, results) => {
+            if (err) {
+                console.error('Error executing query: ', err);  // Log query errors
+                res.status(500).json({ error: 'Failed to fetch LMS information' });
+                return;
+            }
+
+            console.log('Query result:', results);  // Log the result
+            res.json(results);
+        });
+    } catch (err) {
+        console.error('Caught error: ', err);  // Log any other caught errors
+        res.status(500).json({ error: 'Failed to fetch LMS information' });
+    }
+});
+
+app.get('/api/tutor/:id/lms', async (req, res) => {
+    const tutorId = req.params.id;
+    console.log(`Fetching LMS for Tutor ID: ${tutorId}`);  // Add logging
+
+    try {
+        const query = `SELECT lms.* FROM lms
+                       JOIN tutor_lms ON lms.id = tutor_lms.lms_id
+                       WHERE tutor_lms.tutor_id = ?`;
+        db.query(query, [tutorId], (err, results) => {
+            if (err) {
+                console.error('Error executing query: ', err);  // Log query errors
+                res.status(500).json({ error: 'Failed to fetch LMS' });
+                return;
+            }
+
+            console.log('Query result:', results);  // Log the result
+            res.json(results);
+        });
+    } catch (err) {
+        console.error('Caught error: ', err);  // Log any other caught errors
+        res.status(500).json({ error: 'Failed to fetch LMS' });
+    }
+});
+
+app.get('/api/tutor/:id/courses', async (req, res) => {
+    const tutorId = req.params.id;
+    console.log(`Fetching courses for Tutor ID: ${tutorId}`);  // Add logging
+
+    try {
+        // First, get the LMS associated with the tutor
+        const lmsQuery = `SELECT lms_id FROM tutor_lms WHERE tutor_id = ?`;
+        db.query(lmsQuery, [tutorId], (err, lmsResults) => {
+            if (err) {
+                console.error('Error executing LMS query: ', err);  // Log query errors
+                res.status(500).json({ error: 'Failed to fetch LMS for the tutor' });
+                return;
+            }
+
+            if (lmsResults.length === 0) {
+                return res.status(404).json({ error: 'No LMS found for the tutor' });
+            }
+
+            const lmsId = lmsResults[0].lms_id;
+
+            // Now, fetch courses from the LMS
+            const coursesQuery = `SELECT * FROM courses WHERE lms_id = ?`;
+            db.query(coursesQuery, [lmsId], (err, coursesResults) => {
+                if (err) {
+                    console.error('Error executing courses query: ', err);  // Log query errors
+                    res.status(500).json({ error: 'Failed to fetch courses' });
+                    return;
+                }
+
+                console.log('Query result for courses:', coursesResults);  // Log the result
+                res.json(coursesResults);
+            });
+        });
+    } catch (err) {
+        console.error('Caught error: ', err);  // Log any other caught errors
+        res.status(500).json({ error: 'Failed to fetch courses' });
+    }
+});
+
+app.get('/api/students/:id/lms', async (req, res) => {
+    const studentId = req.params.id;
+    console.log(`Fetching LMS for Student ID: ${studentId}`);
+
+    try {
+        const query = `
+            SELECT lms.* FROM lms
+            JOIN enrollments ON lms.id = enrollments.lms_id
+            WHERE enrollments.student_id = ?
+        `;
+        db.query(query, [studentId], (err, results) => {
+            if (err) {
+                console.error('Error executing query: ', err);  // Log query errors
+                res.status(500).json({ error: 'Failed to fetch LMS for the student' });
+                return;
+            }
+
+            console.log('Query result:', results);  // Log the result
+            res.json(results);
+        });
+    } catch (err) {
+        console.error('Caught error: ', err);  // Log any other caught errors
+        res.status(500).json({ error: 'Failed to fetch LMS for the student' });
+    }
+});
+
+
+
+
 
 // Get all tutors
 app.get('/tutors', async (req, res) => {
