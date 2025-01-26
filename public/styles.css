@@ -108,6 +108,7 @@ footer {
     padding: 10px 0;
     width: 100%;
     bottom: 0;
+    position: fixed;
 }
 
 /* Example basic CSS */
@@ -127,10 +128,6 @@ nav ul {
 nav ul li {
     display: inline;
     margin: 0 10px;
-}
-
-main {
-    padding: 20px;
 }
 
 .star {

@@ -5,19 +5,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LMS Information</title>
+    <link rel="stylesheet" href="/styles.css">
+
+    <style>
+        main {
+            width: 80%;
+            margin: auto;
+        }
+
+        .courses-container {
+            margin: 10px;
+            padding: 5px;
+        }
+
+        .course {
+            background-color: #fff5e2;
+            margin: auto;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /* Add a subtle shadow */
+            border: 2px solid #876445;
+
+        }
+    </style>
+
+
 </head>
 
 <body>
+    <header>
+        <h1>Tutor Profile</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/directory">Directory</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    <h1>LMS Information</h1>
 
-    <!-- Display LMS Information -->
-    <h2 id="lms-name">LMS Name</h2>
 
-    <!-- Display Courses Information -->
-    <h3 id="courses-header">Courses</h3>
-    <ul id="courses-list"></ul>
+    <main>
+        <h1>LMS Information</h1>
 
+        <!-- Display LMS Information -->
+        <h2 id="lms-name">LMS Name</h2>
+
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Tutor Directory</p>
+    </footer>
+
+    <script src="/scripts/nav-to-page.js"></script>
     <script src="/scripts/lms.js"></script>
 
 

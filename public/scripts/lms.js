@@ -6,6 +6,21 @@ function getQueryParams() {
     return { userType, id };
 }
 
+// Function to create a course div and append it
+function displayCourse(courseData, containerElement) {
+    const courseDiv = document.createElement('div');
+    courseDiv.classList.add('course');
+
+    // Add course name and description to the div
+    courseDiv.innerHTML = `
+        <strong>Course Name:</strong> ${courseData.name} <br>
+        <strong>Description:</strong> ${courseData.description} <br>
+    `;
+    
+    // Append the course div to the container
+    containerElement.appendChild(courseDiv);
+}
+
 // Function to fetch LMS and courses for a given user
 async function fetchLMSData() {
     const { userType, id } = getQueryParams();
@@ -23,6 +38,7 @@ async function fetchLMSData() {
         } else if (userType === 'student') {
             lmsUrl = `/api/students/${id}/lms`;  // Fetch student LMS data
         }
+
         if (userType == 'student') {
             const element = document.getElementById('courses-header');
             if (element) {
@@ -38,7 +54,6 @@ async function fetchLMSData() {
 
         // Display LMS Information (for student)
         if (lmsData.length > 0) {
-
             const lmsNameElement = document.getElementById('lms-name');
             lmsNameElement.innerHTML = ''; // Clear any previous data
             lmsData.forEach(async (lms) => {
@@ -54,14 +69,11 @@ async function fetchLMSData() {
                 console.log(`Courses for LMS ${lms.id}:`, coursesData);
 
                 // Display courses for the current LMS
-                const coursesContainer = document.createElement('ul');
+                const coursesContainer = document.createElement('div');
+                coursesContainer.classList.add('courses-container');
                 coursesData.forEach(course => {
-                    const courseItem = document.createElement('li');
-                    courseItem.innerText = `Course Name: ${course.name} | Description: ${course.description}`;
-                    coursesContainer.appendChild(courseItem);
+                    displayCourse(course, coursesContainer); // Use displayCourse function to display each course
                 });
-
-
 
                 // Append the courses list under the LMS info
                 lmsItem.appendChild(coursesContainer);
@@ -75,14 +87,7 @@ async function fetchLMSData() {
             const coursesData = await coursesResponse.json();
             console.log('Courses Data:', coursesData);
 
-            // Display courses for the tutor
-            const coursesContainer = document.getElementById('courses-list');
-            coursesContainer.innerHTML = ''; // Clear any existing courses
-            coursesData.forEach(course => {
-                const courseItem = document.createElement('li');
-                courseItem.innerText = `Course Name: ${course.name} | Description: ${course.description}`;
-                coursesContainer.appendChild(courseItem);
-            });
+
         }
     } catch (error) {
         console.error('Error fetching data:', error);

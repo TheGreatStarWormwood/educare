@@ -102,6 +102,45 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border: 2px solid #876445;
         }
+
+        /* Sticky window */
+        .sticky-window {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            background-color: #fff;
+            border: 2px solid #876445;
+            border-radius: 8px;
+            padding: 1rem;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .sticky-window label {
+            font-weight: bold;
+        }
+
+        .sticky-window input,
+        .sticky-window button {
+            width: 80%;
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .sticky-window button {
+            background-color: #008080;
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+
+        .sticky-window button:hover {
+            background-color: #876445;
+        }
     </style>
 </head>
 
@@ -110,28 +149,58 @@
         <h1>Welcome to the Tutor Directory</h1>
     </header>
 
+    <!-- Sticky Window -->
+    <div class="sticky-window">
+        <label for="usertype">User Type</label>
+        <input type="text" id="usertype" placeholder="e.g., tutor, student">
+        <br>
+        <br>
+        <label for="userid">User ID</label>
+        <input type="text" id="userid" placeholder="Enter your User ID">
+        <button onclick="updateLinks()">Apply</button>
+    </div>
+
     <div class="container">
         <div class="column" id="dir-col">
             <div class="column-internal">
                 <h2>Find a Tutor</h2>
                 <p>Discover qualified tutors for a variety of subjects. Browse and select the one that suits your needs.</p>
-                <a href="/directory">Browse Tutors</a>
+                <a href="/directory" id="browse-tutors-link">Browse Tutors</a>
             </div>
         </div>
-    
+
         <div class="column" id="lms-col">
             <div class="column-internal">
                 <h2>Access your LMS</h2>
                 <p>View your LMS</p>
-                <a href="/lms">View now</a>
+                <a href="/lms" id="view-lms-link">View now</a>
             </div>
         </div>
     </div>
-    
 
     <footer>
         <p>&copy; <%= year || new Date().getFullYear() %> Tutor Directory. All rights reserved.</p>
     </footer>
+
+    <script>
+        function updateLinks() {
+            const userType = document.getElementById('usertype').value;
+            const userId = document.getElementById('userid').value;
+
+            if (!userType || !userId) {
+                alert('Please enter both User Type and User ID.');
+                return;
+            }
+
+            const queryParams = `?usertype=${encodeURIComponent(userType)}&id=${encodeURIComponent(userId)}`;
+
+            // Update links dynamically
+            document.getElementById('browse-tutors-link').href = `/directory${queryParams}`;
+            document.getElementById('view-lms-link').href = `/lms${queryParams}`;
+
+            alert('Links updated successfully!');
+        }
+    </script>
 </body>
 
 </html>

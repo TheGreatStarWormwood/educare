@@ -38,6 +38,8 @@ db.connect((err) => {
     console.log('Connected to the database');
 });
 
+
+
 // Function to get all tutors with listings and reviews
 async function getTutorsFromDatabase() {
     return new Promise((resolve, reject) => {
