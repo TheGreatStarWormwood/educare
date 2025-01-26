@@ -2,7 +2,7 @@
 function getQueryParams() {
     const urlParams = new URLSearchParams(window.location.search);
     const userType = urlParams.get('usertype'); // Get the usertype (tutor/student)
-    const id = urlParams.get('id'); // Get the id
+    const id = urlParams.get('userid'); // Get the id
     return { userType, id };
 }
 

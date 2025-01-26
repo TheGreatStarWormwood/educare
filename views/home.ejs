@@ -192,7 +192,7 @@
                 return;
             }
 
-            const queryParams = `?usertype=${encodeURIComponent(userType)}&id=${encodeURIComponent(userId)}`;
+            const queryParams = `?usertype=${encodeURIComponent(userType)}&userid=${encodeURIComponent(userId)}`;
 
             // Update links dynamically
             document.getElementById('browse-tutors-link').href = `/directory${queryParams}`;
