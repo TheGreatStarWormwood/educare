@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+</head>
+<body>
+  <h1>Login</h1>
+  <form id="loginForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required />
+    <label for="usertype">User Type:</label>
+    <select id="usertype" name="usertype" required>
+      <option value="student">Student</option>
+      <option value="tutor">Tutor</option>
+    </select>
+    <button type="submit">Login</button>
+  </form>
+  <p id="response"></p>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const usertype = document.getElementById('usertype').value;
+
+      fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, usertype }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            window.location.href = data.redirectUrl;
+          } else {
+            document.getElementById('response').innerText = 'Error: ' + data.message;
+          }
+        })
+        .catch(err => console.error('Error:', err));
+    });
+  </script>
+</body>
+</html>

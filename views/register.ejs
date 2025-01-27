@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+</head>
+<body>
+  <h1>Register</h1>
+  <form id="registerForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required />
+    <button type="submit">Register</button>
+  </form>
+  <p id="response"></p>
+
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value;
+
+      fetch('/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            document.getElementById('response').innerText = `Registration successful! Student ID: ${data.studentId}`;
+          } else {
+            document.getElementById('response').innerText = 'Error: ' + data.message;
+          }
+        })
+        .catch(err => console.error('Error:', err));
+    });
+  </script>
+</body>
+</html>
