@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Page</title>
+    <link rel="stylesheet" href="/styles.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        main {
+            width: 80%;
+            margin: auto;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            margin-bottom: 10px;
+        }
+
+        .item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #fff5e2;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border: 2px solid #876445;
+
+        }
+
+        .item h3 {
+            margin: 0 0 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <header>
+        <h1>Tutor Profile</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/directory">Directory</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div id="course-details" class="section">
+            <h1 id="course-name">Course Name</h1>
+            <p id="course-description">Course Description</p>
+        </div>
+
+        <div id="materials" class="section">
+            <h2>Materials</h2>
+            <div id="materials-container">
+                <p>Loading materials...</p>
+            </div>
+        </div>
+
+        <div id="assignments" class="section">
+            <h2>Assignments</h2>
+            <div id="assignments-container">
+                <p>Loading assignments...</p>
+            </div>
+        </div>
+
+    </main>
+
+
+    <footer>
+        <p>&copy; 2025 Tutor Directory</p>
+    </footer>
+
+    <script src="/scripts/nav-to-page.js"></script>
+
+    <script src="/scripts/course.js"></script>
+</body>
+
+</html>

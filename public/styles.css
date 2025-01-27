@@ -92,10 +92,11 @@ main {
     
 }
 .tutor-item {
+    
     border: 2px solid #876445;
     padding: 10px;
     margin: 10px;
-    width: 200px;
+    width: 300px;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     
@@ -140,7 +141,7 @@ nav ul li {
 }
 
 .directory{
-    max-width: 60%;
+    max-width: 80%;
     margin: auto;
     background-color: #F4DFBA;
     padding: 10px;

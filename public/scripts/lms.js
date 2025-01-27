@@ -6,6 +6,10 @@ function getQueryParams() {
     return { userType, id };
 }
 
+const params = new URLSearchParams(window.location.search);
+const usertype = params.get('usertype');
+const userid = params.get('userid');
+
 // Function to create a course div and append it
 function displayCourse(courseData, containerElement) {
     const courseDiv = document.createElement('div');
@@ -13,10 +17,10 @@ function displayCourse(courseData, containerElement) {
 
     // Add course name and description to the div
     courseDiv.innerHTML = `
-        <strong>Course Name:</strong> ${courseData.name} <br>
+        <h3><a href="/course?id=${courseData.id}&usertype=${usertype}&userid=${userid}">${courseData.name}</a></h3>
         <strong>Description:</strong> ${courseData.description} <br>
     `;
-    
+
     // Append the course div to the container
     containerElement.appendChild(courseDiv);
 }

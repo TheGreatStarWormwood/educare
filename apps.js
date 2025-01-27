@@ -97,6 +97,10 @@ app.get('/lms', async (req, res) => {
     res.render('lms');
 });
 
+// Route to return the tutor profile data as JSON
+app.get('/course', async (req, res) => {
+    res.render('course');
+});
 
 
 
@@ -299,6 +303,136 @@ app.get('/api/students/:id/lms', async (req, res) => {
     } catch (err) {
         console.error('Caught error: ', err);  // Log any other caught errors
         res.status(500).json({ error: 'Failed to fetch LMS for the student' });
+    }
+});
+
+app.get('/api/courses/:id', async (req, res) => {
+    const courseId = req.params.id;
+    console.log(`Fetching details for Course ID: ${courseId}`);
+
+    try {
+        const query = `
+            SELECT * FROM courses
+            WHERE id = ?
+        `;
+        db.query(query, [courseId], (err, results) => {
+            if (err) {
+                console.error('Error executing query: ', err);
+                res.status(500).json({ error: 'Failed to fetch course details' });
+                return;
+            }
+
+            console.log('Course details:', results);
+            res.json(results);
+        });
+    } catch (err) {
+        console.error('Caught error: ', err);
+        res.status(500).json({ error: 'Failed to fetch course details' });
+    }
+});
+
+app.get('/api/courses/:id/materials', async (req, res) => {
+    const courseId = req.params.id;
+    console.log(`Fetching materials for Course ID: ${courseId}`);
+
+    try {
+        const query = `
+            SELECT * FROM materials
+            WHERE course_id = ?
+        `;
+        db.query(query, [courseId], (err, results) => {
+            if (err) {
+                console.error('Error executing query: ', err);
+                res.status(500).json({ error: 'Failed to fetch course materials' });
+                return;
+            }
+
+            console.log('Course materials:', results);
+            res.json(results);
+        });
+    } catch (err) {
+        console.error('Caught error: ', err);
+        res.status(500).json({ error: 'Failed to fetch course materials' });
+    }
+});
+
+app.get('/api/courses/:id/assignments', async (req, res) => {
+    const courseId = req.params.id;
+    console.log(`Fetching assignments for Course ID: ${courseId}`);
+
+    try {
+        const query = `
+            SELECT * FROM assignments
+            WHERE course_id = ?
+        `;
+        db.query(query, [courseId], (err, results) => {
+            if (err) {
+                console.error('Error executing query: ', err);
+                res.status(500).json({ error: 'Failed to fetch course assignments' });
+                return;
+            }
+
+            console.log('Course assignments:', results);
+            res.json(results);
+        });
+    } catch (err) {
+        console.error('Caught error: ', err);
+        res.status(500).json({ error: 'Failed to fetch course assignments' });
+    }
+});
+
+app.get('/api/courses/:id/details', async (req, res) => {
+    const courseId = req.params.id;
+    console.log(`Fetching full details for Course ID: ${courseId}`);
+
+    try {
+        const courseQuery = `
+            SELECT * FROM courses
+            WHERE id = ?
+        `;
+
+        const materialsQuery = `
+            SELECT * FROM materials
+            WHERE course_id = ?
+        `;
+
+        const assignmentsQuery = `
+            SELECT * FROM assignments
+            WHERE course_id = ?
+        `;
+
+        db.query(courseQuery, [courseId], (err, courseResults) => {
+            if (err) {
+                console.error('Error fetching course:', err);
+                res.status(500).json({ error: 'Failed to fetch course details' });
+                return;
+            }
+
+            db.query(materialsQuery, [courseId], (err, materialsResults) => {
+                if (err) {
+                    console.error('Error fetching materials:', err);
+                    res.status(500).json({ error: 'Failed to fetch course materials' });
+                    return;
+                }
+
+                db.query(assignmentsQuery, [courseId], (err, assignmentsResults) => {
+                    if (err) {
+                        console.error('Error fetching assignments:', err);
+                        res.status(500).json({ error: 'Failed to fetch course assignments' });
+                        return;
+                    }
+
+                    res.json({
+                        course: courseResults[0],
+                        materials: materialsResults,
+                        assignments: assignmentsResults,
+                    });
+                });
+            });
+        });
+    } catch (err) {
+        console.error('Caught error: ', err);
+        res.status(500).json({ error: 'Failed to fetch course details' });
     }
 });
 
@@ -588,10 +722,10 @@ app.post('/add-listing', (req, res) => {
 // CRUD routes for Reviews
 
 // Add a new review
-app.post('/add-review', (req, res) => {
-    const { tutorId, text, stars } = req.body;
-    const query = 'INSERT INTO reviews (tutorId, text, stars) VALUES (?, ?, ?)';
-    db.query(query, [tutorId, text, stars], (err, result) => {
+app.post('/api/add-review', (req, res) => {
+    const { tutor_id, text, stars } = req.body;
+    const query = 'INSERT INTO reviews (tutor_id, text, stars) VALUES (?, ?, ?)';
+    db.query(query, [tutor_id, text, stars], (err, result) => {
         if (err) {
             console.error('Error adding review:', err.message);
             res.status(500).json({ success: false, message: 'Internal Server Error', error: err.message });
