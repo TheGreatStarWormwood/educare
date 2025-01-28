@@ -1,40 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register</title>
+  <title>Create User</title>
+  <link rel="stylesheet" href="/styles.css">
+
+  <style>
+    /* Basic reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .create-user-container {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 40px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      transform: translateY(-20px);
+      transition: all 0.3s ease-in-out;
+    }
+
+    .create-user-container:hover {
+      transform: translateY(0);
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #333;
+      font-weight: bold;
+    }
+
+    label {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 8px;
+      text-align: left;
+      color: #555;
+    }
+
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 5px;
+      border: 2px solid #ddd;
+      font-size: 1rem;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #6c63ff;
+      box-shadow: 0 0 5px rgba(108, 99, 255, 0.3);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #6c63ff;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #5a54d7;
+    }
+
+    #error-message {
+      margin-top: 20px;
+      font-size: 1rem;
+      color: red;
+      display: none;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group select,
+    .form-group textarea {
+      font-family: inherit;
+    }
+  </style>
+
 </head>
+
 <body>
-  <h1>Register</h1>
-  <form id="registerForm">
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required />
-    <button type="submit">Register</button>
-  </form>
-  <p id="response"></p>
+  <main>
+    <div class="create-user-container">
+      <h1>Create User</h1>
+      <form id="create-user-form">
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required placeholder="Enter your name">
+        </div>
 
-  <script>
-    document.getElementById('registerForm').addEventListener('submit', function (e) {
-      e.preventDefault();
+        <div class="form-group">
+          <label for="description">Description (Optional):</label>
+          <textarea id="description" name="description" rows="4" placeholder="Add a description (optional)"></textarea>
+        </div>
 
-      const name = document.getElementById('name').value;
+        <div class="form-group">
+          <label for="image">Profile Image URL (Optional):</label>
+          <input type="text" id="image" name="image" placeholder="Enter image URL (optional)">
+        </div>
 
-      fetch('/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name }),
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            document.getElementById('response').innerText = `Registration successful! Student ID: ${data.studentId}`;
-          } else {
-            document.getElementById('response').innerText = 'Error: ' + data.message;
-          }
-        })
-        .catch(err => console.error('Error:', err));
-    });
-  </script>
+        <div class="form-group">
+          <label for="user-type">User Type:</label>
+          <select id="user-type" name="user-type" required>
+            <option value="" disabled selected>Select user type</option>
+            <option value="student">Student</option>
+            <option value="tutor">Tutor</option>
+          </select>
+        </div>
+
+        <button type="submit">Create</button>
+      </form>
+      <p id="error-message">There was an error creating the user. Please try again.</p>
+      <p id="success-message" style="color: green; display: none;">User created successfully!</p>
+    </div>
+  </main>
+
+  <script src="/scripts/create-user.js"></script>
 </body>
+
 </html>

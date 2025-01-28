@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= pageTitle || "Home - Tutor Directory" %></title>
+    <title>
+        <%= pageTitle || "Home - Tutor Directory" %>
+    </title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -164,7 +166,8 @@
         <div class="column" id="dir-col">
             <div class="column-internal">
                 <h2>Find a Tutor</h2>
-                <p>Discover qualified tutors for a variety of subjects. Browse and select the one that suits your needs.</p>
+                <p>Discover qualified tutors for a variety of subjects. Browse and select the one that suits your needs.
+                </p>
                 <a href="/directory" id="browse-tutors-link">Browse Tutors</a>
             </div>
         </div>
@@ -183,12 +186,23 @@
     </footer>
 
     <script>
+        const params = new URLSearchParams(window.location.search);
+        const usertype = params.get('usertype');
+        const userid = params.get('userid');
+
         function updateLinks() {
-            const userType = document.getElementById('usertype').value;
-            const userId = document.getElementById('userid').value;
+
+            if (!usertype || !userid) {
+                userType = document.getElementById('usertype').value;
+                userId = document.getElementById('userid').value;
+            }else {
+                userType = usertype;
+                userId = userid;
+            }
 
             if (!userType || !userId) {
-                alert('Please enter both User Type and User ID.');
+                alert('need to login');
+                window.location.href = '/login';  // Redirects to the login page
                 return;
             }
 
@@ -200,6 +214,14 @@
 
             alert('Links updated successfully!');
         }
+
+        updateLinks();
+
+
+        if (!usertype || !userid) {
+
+        }
+
     </script>
 </body>
 

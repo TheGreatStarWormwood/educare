@@ -49,16 +49,60 @@ document.addEventListener("DOMContentLoaded", async function () {
         const assignmentsContainer = document.getElementById('assignments-container');
         if (assignmentsData && assignmentsData.length > 0) {
             assignmentsContainer.innerHTML = '';
+            // Inside your existing loop for assignments:
             assignmentsData.forEach(assignment => {
                 const assignmentItem = document.createElement('div');
                 assignmentItem.classList.add('item');
                 assignmentItem.innerHTML = `
-                    <h3>${assignment.title}</h3>
-                    <p>${assignment.description}</p>
-                    <a href="/assignments/${assignment.file}" target="_blank">Download</a>
-                `;
+        <h3>${assignment.title}</h3>
+        <p>${assignment.description}</p>
+        <a href="/assignments/${assignment.file}" target="_blank">Download</a>
+        <form id="upload-form-${assignment.id}" class="upload-form" enctype="multipart/form-data">
+            <input type="file" name="file" id="file-${assignment.id}" />
+            <button type="submit">Submit Assignment</button>
+        </form>
+        <div id="upload-status-${assignment.id}" class="upload-status"></div>
+    `;
                 assignmentsContainer.appendChild(assignmentItem);
+
+                // Add event listener to the form
+                const form = document.getElementById(`upload-form-${assignment.id}`);
+                form.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+                    const fileInput = document.getElementById(`file-${assignment.id}`);
+                    const file = fileInput.files[0];
+
+                    if (!file) {
+                        alert('Please select a file to upload.');
+                        return;
+                    }
+
+                    const statusDiv = document.getElementById(`upload-status-${assignment.id}`);
+                    statusDiv.textContent = 'Uploading...';
+
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('assignmentId', assignment.id);
+
+                    try {
+                        const response = await fetch(`/api/courses/${courseId}/assignments/${assignment.id}/submit`, {
+                            method: 'POST',
+                            body: formData,
+                        });
+
+                        const result = await response.json();
+                        if (response.ok) {
+                            statusDiv.textContent = 'File uploaded successfully!';
+                        } else {
+                            statusDiv.textContent = `Error: ${result.message}`;
+                        }
+                    } catch (error) {
+                        console.error('Upload failed:', error);
+                        statusDiv.textContent = 'Error uploading file.';
+                    }
+                });
             });
+
         } else {
             assignmentsContainer.innerHTML = "<p>No assignments found.</p>";
         }

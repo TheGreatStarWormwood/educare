@@ -62,8 +62,11 @@ async function fetchLMSData() {
             lmsNameElement.innerHTML = ''; // Clear any previous data
             lmsData.forEach(async (lms) => {
                 // For each LMS, display tutor id and fetch courses
+                const tutor_url = `/api/tutors/id/${lms.tutor_id}`;
+                const tutor_response = await fetch(tutor_url);
+                const tutor_data = await tutor_response.json(); // Parse the JSON response
                 const lmsItem = document.createElement('div');
-                lmsItem.innerHTML = `<strong>LMS Tutor ID:</strong> ${lms.tutor_id} <br>`;
+                lmsItem.innerHTML = `<strong>LMS Tutor:</strong> ${tutor_data.name} <br>`;
                 lmsNameElement.appendChild(lmsItem);
 
                 // Now fetch courses for each LMS id

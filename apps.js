@@ -102,9 +102,270 @@ app.get('/course', async (req, res) => {
     res.render('course');
 });
 
+// Route to return the tutor profile data as JSON
+app.get('/login', async (req, res) => {
+    res.render('login');
+});
+
+// Route to return the tutor profile data as JSON
+app.get('/register', async (req, res) => {
+    res.render('register');
+});
+
+app.post('/api/login', async (req, res) => {
+    const { name, type } = req.body;
+
+    if (!name || !type) {
+        return res.status(400).json({
+            success: false,
+            message: "Name and type are required.",
+        });
+    }
+
+    try {
+        let apiUrl = '';
+
+        // Set the API URL based on the user type
+        if (type.toLowerCase() === 'student') {
+            apiUrl = `/api/students/name/${name}`;
+        } else if (type.toLowerCase() === 'tutor') {
+            apiUrl = `/api/tutors/name/${name}`;
+        } else {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid user type. Must be 'student' or 'tutor'.",
+            });
+        }
+
+        // Fetch the user data from the respective API
+        const response = await fetch(`http://localhost:${port}${apiUrl}`);
+        const data = await response.json();
+
+        if (data.success) {
+            res.json({
+                success: true,
+                data: { userid: data.data.id, usertype: type },
+            });
+        } else {
+            res.json({
+                success: false,
+                message: data.message || "User not found.",
+            });
+        }
+    } catch (error) {
+        console.error('Error during login:', error.message);
+        res.status(500).json({
+            success: false,
+            message: 'Internal Server Error. Please try again later.',
+        });
+    }
+});
+
+app.get('/api/tutors/name/:name', async (req, res) => {
+    const { name } = req.params;
+
+    try {
+        // Fetch tutors from the database or an existing `/tutors` API
+        let tutors = await getTutorsFromDatabase(); // Adjust if needed to call the correct DB logic
+
+        // Find the tutor by name (case-insensitive)
+        const tutor = tutors.find(t => t.name.toLowerCase() === name.toLowerCase());
+
+        if (tutor) {
+            res.json({
+                success: true,
+                data: { id: tutor.id, name: tutor.name },
+            });
+        } else {
+            res.status(404).json({
+                success: false,
+                message: 'Tutor not found.',
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching tutor:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Internal Server Error',
+        });
+    }
+});
+
+app.get('/api/students/name/:name', (req, res) => {
+    const { name } = req.params;
+
+    // Fetch students from the database
+    db.query('SELECT id, name FROM students', (err, results) => {
+        if (err) {
+            console.error('Error fetching students:', err.message);
+            return res.status(500).json({
+                success: false,
+                message: 'Internal Server Error',
+            });
+        }
+
+        // Find the student by name (case-insensitive)
+        const student = results.find(s => s.name.toLowerCase() === name.toLowerCase());
+
+        if (student) {
+            res.status(200).json({
+                success: true,
+                data: { id: student.id, name: student.name },
+            });
+        } else {
+            res.status(404).json({
+                success: false,
+                message: 'Student not found.',
+            });
+        }
+    });
+});
+
+app.post('/api/courses/:courseId/assignments/:assignmentId/submit', (req, res) => {
+    const { courseId, assignmentId } = req.params;
+    console.log('Received upload request for course:', courseId, 'and assignment:', assignmentId);
+
+    // Check if the file was uploaded
+    if (!req.file) {
+        console.error('No file uploaded.');
+        return res.status(400).json({ message: 'No file uploaded.' });
+    }
+
+    console.log('File uploaded:', req.file.originalname);
+
+    // Save the file with the assignmentId and courseId for easy identification
+    const uploadedFilePath = path.join(__dirname, 'submissions', `${courseId}_${assignmentId}_${req.file.originalname}`);
+    console.log('File will be saved at:', uploadedFilePath);
+
+    // Rename and move the file to a better location
+    fs.rename(req.file.path, uploadedFilePath, (err) => {
+        if (err) {
+            console.error('Error renaming file:', err);
+            return res.status(500).json({ message: 'Error uploading file.' });
+        }
+
+        console.log('File successfully uploaded and moved to:', uploadedFilePath);
+
+        // Return success response
+        res.json({ message: 'File uploaded successfully!', filePath: uploadedFilePath });
+    });
+});
 
 
-// CRUD routes for Tutors
+app.get('/api/tutors/id/:id', async (req, res) => {
+    const tutorId = req.params.id;
+    console.log(`Fetching tutor information for Tutor ID: ${tutorId}`);
+
+    try {
+        const query = `SELECT * FROM tutors WHERE id = ?`;
+        db.query(query, [tutorId], (err, results) => {
+            if (err) {
+                console.error('Error executing query: ', err);
+                res.status(500).json({ error: 'Failed to fetch tutor information' });
+                return;
+            }
+
+            if (results.length === 0) {
+                res.status(404).json({ error: 'Tutor not found' });
+                return;
+            }
+
+            console.log('Query result:', results);
+            res.json({
+                id: results[0].id,
+                name: results[0].name
+            });
+        });
+    } catch (err) {
+        console.error('Caught error: ', err);
+        res.status(500).json({ error: 'Failed to fetch tutor information' });
+    }
+});
+
+app.get('/api/students/id/:id', async (req, res) => {
+    const studentId = req.params.id;
+    console.log(`Fetching student information for Student ID: ${studentId}`);
+
+    try {
+        const query = `SELECT * FROM students WHERE id = ?`;
+        db.query(query, [studentId], (err, results) => {
+            if (err) {
+                console.error('Error executing query: ', err);
+                res.status(500).json({ error: 'Failed to fetch student information' });
+                return;
+            }
+
+            if (results.length === 0) {
+                res.status(404).json({ error: 'Student not found' });
+                return;
+            }
+
+            console.log('Query result:', results);
+            res.json({
+                id: results[0].id,
+                name: results[0].name
+            });
+        });
+    } catch (err) {
+        console.error('Caught error: ', err);
+        res.status(500).json({ error: 'Failed to fetch student information' });
+    }
+});
+
+app.post('/api/create-student', async (req, res) => {
+    const { name, description, image } = req.body;
+
+    if (!name) {
+        return res.status(400).json({ message: 'Name is required.' });
+    }
+
+    try {
+        const result = await db.query('INSERT INTO students (name) VALUES (?)', [name]);
+        const studentId = result.insertId;
+
+        // Optional fields
+        if (description) {
+            await db.query('UPDATE students SET description = ? WHERE id = ?', [description, studentId]);
+        }
+
+        if (image) {
+            await db.query('UPDATE students SET image = ? WHERE id = ?', [image, studentId]);
+        }
+
+        res.status(201).json({ message: 'Student created successfully!', studentId });
+    } catch (err) {
+        console.error('Error creating student:', err);
+        res.status(500).json({ message: 'Error creating student. Please try again.' });
+    }
+});
+
+app.post('/api/create-tutor', async (req, res) => {
+    const { name, description, image } = req.body;
+
+    if (!name) {
+        return res.status(400).json({ message: 'Name is required.' });
+    }
+
+    try {
+        const result = await db.query('INSERT INTO tutors (name) VALUES (?)', [name]);
+        const tutorId = result.insertId;
+
+        // Optional fields
+        if (description) {
+            await db.query('UPDATE tutors SET description = ? WHERE id = ?', [description, tutorId]);
+        }
+
+        if (image) {
+            await db.query('UPDATE tutors SET image = ? WHERE id = ?', [image, tutorId]);
+        }
+
+        res.status(201).json({ message: 'Tutor created successfully!', tutorId });
+    } catch (err) {
+        console.error('Error creating tutor:', err);
+        res.status(500).json({ message: 'Error creating tutor. Please try again.' });
+    }
+});
+
 
 app.get('/api/lms/:id/courses', async (req, res) => {
     const lmsId = req.params.id;
@@ -435,6 +696,7 @@ app.get('/api/courses/:id/details', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch course details' });
     }
 });
+
 
 
 
