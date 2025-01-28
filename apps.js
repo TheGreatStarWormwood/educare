@@ -4,8 +4,14 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 
+
+const { DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT } = require('./CONSTANTS');
+
 const app = express();
-const port = 4405;
+const port = 4405; // the PORT the node js server will run on
+                   // to visit the server go to url localhost:{PORT}/
+
+
 
 // Set the view engine to EJS
 app.set('view engine', 'ejs');
@@ -22,12 +28,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Set up MySQL connection
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'root', // Replace with your MySQL root password
-    database: 'educare',
-    port: 3307 // Use your MySQL container port
+    host: DB_HOST,
+    user: DB_USER,
+    password: DB_PASSWORD,
+    database: DB_NAME,
+    port: DB_PORT
 });
+
 
 // Connect to the database
 db.connect((err) => {
@@ -36,6 +43,7 @@ db.connect((err) => {
         return;
     }
     console.log('Connected to the database');
+    console.log(`database running on ${DB_PORT}`);
 });
 
 
