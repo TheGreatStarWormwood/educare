@@ -235,10 +235,6 @@ nav ul li {
     margin-bottom: 20px;     /* Space between the tutor header and the listings */
 }
 
-.tutor-description { /* TODO color not changing */
-    color: #4CAF50; /* Example: Green */
-    font-size: 1.2em; /* Optional: Adjust font size */
-}
 
 .tutor-info {
     display: flex;

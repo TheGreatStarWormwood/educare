@@ -735,6 +735,34 @@ app.post('/add-tutor', (req, res) => {
     });
 });
 
+app.post('/api/create-listing/:id', (req, res) => {
+    const tutorId = req.params.id;
+    const { keywords } = req.body;
+
+    const query = 'INSERT INTO listings (tutor_id, keywords) VALUES (?, ?)';
+    db.query(query, [tutorId, keywords], (err, results) => {
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Failed to create listing.' });
+        }
+        res.json({ success: true, message: 'Listing created.' });
+    });
+});
+
+
+app.put('/api/update-tutor/:id', (req, res) => {
+    const tutorId = req.params.id;
+    const { name, description } = req.body;
+
+    const query = 'UPDATE tutors SET name = ?, description = ? WHERE id = ?';
+    db.query(query, [name, description, tutorId], (err, results) => {
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Failed to update tutor profile.' });
+        }
+        res.json({ success: true, message: 'Tutor profile updated.' });
+    });
+});
+
+
 // Update a tutor
 app.put('/update-tutor/:id', (req, res) => {
     const tutorId = req.params.id;

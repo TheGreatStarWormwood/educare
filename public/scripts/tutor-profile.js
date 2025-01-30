@@ -17,6 +17,18 @@ document.addEventListener('DOMContentLoaded', function () {
         if (usertype === 'student') {
             renderReviewForm(tutorId);
         }
+
+        // Check if the user is a tutor and the userID matches the tutor's ID
+        if (usertype === 'tutor' && userid === tutorId) {
+            // Render the profile edit form and create listing form
+            renderProfileEditForm(tutorId);
+            renderCreateListingForm(tutorId);
+        } else {
+            // If the condition is not met, remove the edit profile container
+            if (editProfileContainer) {
+                editProfileContainer.remove();
+            }
+        }
     }
 
     // Fetch tutor details
@@ -25,39 +37,23 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(tutor => {
                 if (tutor) {
-                    const tutorDetailsContainer = document.getElementById('tutor-profile');
+                    const tutorDetailsContainer = document.getElementById('tutorDetailsContainer');
                     tutorDetailsContainer.innerHTML = `
                         <div class="tutor-header">
                             <div class="tutor-info">
                                 <img src="/${tutor.image}" alt="${tutor.name}" class="tutor-image-profile">
                                 <h2>${tutor.name}</h2>
                             </div>
+                            <br>
                             <p class="tutor-description">${tutor.description}</p>
                         </div>
-                        <div class="horizontal-sep"></div>
-                        <div id="listingsContainer"></div>
-                        <div id="reviewsContainer"></div>
-                        <div id="submitReviewContainer"></div>
                     `;
-
-                    fetchTutorListings(tutorId);
-
-                    // Render review form for students after containers exist
-                    if (usertype === 'student') {
-                        renderReviewForm(tutorId);
-                    
-                    }
-                    fetchTutorReviews(tutorId);
-
-                    
-
                 } else {
                     alert('Tutor not found.');
                 }
             })
             .catch(err => console.error('Error fetching tutor details:', err));
     }
-
 
     // Fetch tutor listings
     function fetchTutorListings(tutorId) {
@@ -99,66 +95,94 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(err => console.error('Error fetching tutor reviews:', err));
     }
 
-    // Render review form
-    function renderReviewForm(tutorId) {
-        const submitReviewContainer = document.getElementById('submitReviewContainer');
-        submitReviewContainer.innerHTML = `
-            <h3>Leave a Review</h3>
-            <form id="reviewForm">
-                <textarea id="reviewText" placeholder="Write your review..." required></textarea>
-                <input type="number" id="reviewRating" min="1" max="5" placeholder="Rating (1-5)" required />
-                <button type="submit">Submit Review</button>
+    // Render the profile edit form for the tutor
+    function renderProfileEditForm(tutorId) {
+        const editProfileContainer = document.getElementById('editProfileContainer');
+        editProfileContainer.innerHTML = `
+            <h3>Edit Profile</h3>
+            <form id="editProfileForm">
+                <input type="text" id="editName" placeholder="Name" required />
+                <br>
+                <textarea id="editDescription" placeholder="Description"></textarea>
+                <br>
+                <button type="submit">Update Profile</button>
             </form>
         `;
 
-        const reviewForm = document.getElementById('reviewForm');
-        reviewForm.addEventListener('submit', function (e) {
+        const editProfileForm = document.getElementById('editProfileForm');
+        editProfileForm.addEventListener('submit', function (e) {
             e.preventDefault();
-            const reviewText = document.getElementById('reviewText').value;
-            const reviewRating = parseInt(document.getElementById('reviewRating').value);
-
-            submitReview(tutorId, reviewText, reviewRating, reviewForm);
+            const newName = document.getElementById('editName').value;
+            const newDescription = document.getElementById('editDescription').value;
+            updateTutorProfile(tutorId, newName, newDescription);
         });
     }
 
-    function submitReview(tutorId, reviewText, reviewRating) {
-        fetch('/api/add-review', {
+    // Call API to update tutor profile
+    function updateTutorProfile(tutorId, newName, newDescription) {
+        fetch(`/api/update-tutor/${tutorId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: newName,
+                description: newDescription,
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Profile updated successfully.');
+                    fetchTutorDetails(tutorId); // Refresh tutor details
+                } else {
+                    console.error('Error updating profile:', data.message);
+                }
+            })
+            .catch(err => console.error('Error updating profile:', err));
+    }
+
+    // Render the create listing form for the tutor
+    function renderCreateListingForm(tutorId) {
+        const submitListingContainer = document.getElementById('submitListingContainer');
+        submitListingContainer.innerHTML = `
+            <h3>Create New Listing</h3>
+            <form id="createListingForm">
+                <input type="text" id="listingKeywords" placeholder="Listing Keywords" required />
+                <button type="submit">Create Listing</button>
+            </form>
+        `;
+
+        const createListingForm = document.getElementById('createListingForm');
+        createListingForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const keywords = document.getElementById('listingKeywords').value;
+            createListing(tutorId, keywords);
+        });
+    }
+
+    // Call API to create a new listing
+    function createListing(tutorId, keywords) {
+        fetch(`/api/create-listing/${tutorId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                tutor_id: tutorId,
-                text: reviewText,
-                stars: reviewRating,
+                keywords: keywords,
             }),
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.status} - ${response.statusText}`);
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    console.log('Review submitted successfully:', data.message);
-
-                    // Update the UI with the new review
-                    const reviewsContainer = document.getElementById('reviewsContainer');
-                    const reviewList = reviewsContainer.querySelector('ul') || document.createElement('ul');
-                    reviewList.innerHTML += `<li>${reviewText} - Rating: ${reviewRating}</li>`;
-                    reviewsContainer.appendChild(reviewList);
-
-                    // Clear the form fields
-                    const reviewForm = document.getElementById('reviewForm');
-                    if (reviewForm) reviewForm.reset();
+                    alert('Listing created successfully.');
+                    fetchTutorListings(tutorId); // Refresh listings
                 } else {
-                    console.error('Error adding review:', data.message);
+                    console.error('Error creating listing:', data.message);
                 }
             })
-            .catch(err => console.error('Error submitting review:', err));
+            .catch(err => console.error('Error creating listing:', err));
     }
-
 
     // Run the initializer
     init();

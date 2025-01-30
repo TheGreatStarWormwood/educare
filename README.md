@@ -1,4 +1,6 @@
 
+source files can also be found here:
+https://github.com/TheGreatStarWormwood/educare
 
 # Dependencies
 
